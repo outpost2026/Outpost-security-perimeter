@@ -2,7 +2,7 @@
 
 ## Deterministické zabezpečení perimetru – váhový filtr jako jádro detekce neoprávněného vstupu
 
-Projekt řeší zásadní problém zabezpečení odlehlé chaty v jednom z mnoha **pražských údolí** – prostředí, kde běžná PIR čidla, Doppler radary generují nepřijatelné množství falešných poplachů (vítr, listí, pavouci, zvěř). Namísto slepého spoléhání na jeden senzorický princip staví systém na **dvoustupňové validaci**, jejíž jádro tvoří **váhový detektor** – prvek, který tento projekt odlišuje od standardních IoT security řešení.
+Projekt řeší zásadní problém zabezpečení odlehlé chaty v jednom z mnoha **pražských údolí** – prostředí, kde běžná PIR čidla, Doppler radary generují nepřijatelné množství falešných poplachů (vítr, listí, pavouci, zvěř, lesní skřítci, víly). Namísto slepého spoléhání na jeden senzorický princip staví systém na **dvoustupňové validaci**, jejíž jádro tvoří **váhový detektor** – prvek, který tento projekt odlišuje od standardních IoT security řešení.
 
 **Základní odlišnost systému:**
 - **Váha (tenzometrická nebo pneumatická)** fyzicky měří hmotnost objektu, který vstupuje do chráněného prostoru.
