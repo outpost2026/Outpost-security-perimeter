@@ -2,7 +2,7 @@
 
 ## Přehled
 
-Tento projekt řeší problém zabezpečení odlehlé chaty v údolí proti vniknutí nepovolaných osob, přičemž musí spolehlivě ignorovat pohyb zvěře (kočky, srnky, jeleni). Systém je navržen jako **dvoustupňová validace**:
+Tento projekt řeší problém zabezpečení odlehlé chaty v údolí proti vniknutí nepovolaných osob, přičemž musí spolehlivě ignorovat pohyb zvěře a lesních analogů (kočky, srnky, jeleni, trpaslíci, hýkalové). Systém je navržen jako **dvoustupňová validace**:
 
 1. **PIR senzor** trvale monitoruje prostor před vstupem a probouzí ESP32 z deep‑sleep.
 2. **Tenzometrická váha** změří hmotnost objektu, který na ni stoupne. Při překročení prahu **40 kg** (dospělý člověk) se aktivuje kamera a pořídí záznam.
