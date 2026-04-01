@@ -1,152 +1,94 @@
-\# GCP Stack Ingest v3 – Serverless Infrastructure
+# GCP Stack Ingest v3 – Serverless Infrastructure
 
+This document describes the Google Cloud Platform (GCP) resources used by the **Outpost project**. The stack is designed for **zero idle cost** (no always‑running VMs) and is fully managed via serverless services.
 
+> [!TIP]
+> **Cost Efficiency:** By utilizing Cloud Run's scale-to-zero capability and staying within free tiers for Firestore and BigQuery, the total monthly cost is kept near $0.
 
-This document describes the Google Cloud Platform (GCP) resources used by the Outpost project. The stack is designed for \*\*zero idle cost\*\* (no always‑running VMs) and is fully managed via serverless services.
-
-
-
-\## Overview
-
-
+## 1. Overview of Services
 
 | Service | Purpose |
+| :--- | :--- |
+| **Cloud Scheduler** | Cron-like triggers for periodic jobs (6 schedules). |
+| **Cloud Run** | Serverless container execution for orchestrator, scrapers, and pipelines. |
+| **Firestore** | Primary NoSQL database for IoT telemetry, events, and configuration. |
+| **BigQuery** | Data warehouse for long-term analytics and reporting. |
+| **Cloud Storage** | Archival storage for exported data and backups. |
+| **Cloud Functions** | Lightweight event-driven functions for specific integrations. |
+| **IAM** | Fine-grained access control across the stack. |
 
-|---------|---------|
+---
 
-| \*\*Cloud Scheduler\*\* | Cron‑like triggers for periodic jobs (6 schedules). |
+## 2. Components
 
-| \*\*Cloud Run\*\* | Serverless container execution for orchestrator, scrapers, and pipelines. |
+### 2.1. Cloud Scheduler Jobs
+* **`scraper-bazos`**: Runs daily at 06:00; triggers scraper for new listings.
+* **`scraper-notebooky`**: Runs daily at 07:00; scrapes notebook offers.
+* **`meteo-pipeline`**: Runs every 30 minutes; fetches data from ČHMÚ Kbely and writes to Firestore.
+* **`orchestrator-daily`**: Daily at 23:00; executes cleanup, backup, and summary tasks.
+* **`iot-ingest`**: Runs every 5 minutes to process queued IoT events.
+* **`health-check`**: Runs hourly to verify all services are responsive.
 
-| \*\*Firestore\*\* | Primary NoSQL database for IoT telemetry, events, and configuration. |
-
-| \*\*BigQuery\*\* | Data warehouse for long‑term analytics and reporting. |
-
-| \*\*Cloud Storage (GCS)\*\* | Archival storage for exported data and backups. |
-
-| \*\*Cloud Functions\*\* | Lightweight event‑driven functions (used for specific integrations). |
-
-| \*\*IAM\*\* | Fine‑grained access control. |
-
-
-
-\## Components
-
-
-
-\### 1. Cloud Scheduler Jobs
-
-\- \*\*`scraper-bazos`\*\* – Runs daily at 06:00, triggers Cloud Run `scraper-bazos` to fetch new listings.
-
-\- \*\*`scraper-notebooky`\*\* – Runs daily at 07:00, scrapes notebook offers.
-
-\- \*\*`meteo-pipeline`\*\* – Runs every 30 minutes, fetches data from ČHMÚ Kbely and writes to Firestore.
-
-\- \*\*`orchestrator-daily`\*\* – Daily at 23:00, runs cleanup, backup, and summary tasks.
-
-\- \*\*`iot-ingest`\*\* – (Reserved for future ESP32 POST ingestion) – runs every 5 minutes to process queued events.
-
-\- \*\*`health-check`\*\* – Every hour, verifies that all services are responsive.
-
-
-
-\### 2. Cloud Run Services
-
-All services are containerised (Docker) and scale to zero when idle.
-
-
+### 2.2. Cloud Run Services
+All services are containerized (Docker) and configured to scale to zero when idle.
 
 | Service | Description | Runtime |
-
-|---------|-------------|---------|
-
-| `orchestrator` | Main entry point for scheduled jobs; coordinates sub‑tasks. | Python 3.11 |
-
-| `scraper-bazos` | Fetches and parses Bazoš listings; writes to Firestore. | Python 3.11 |
-
+| :--- | :--- | :--- |
+| `orchestrator` | Main entry point; coordinates sub-tasks. | Python 3.11 |
+| `scraper-bazos` | Fetches/parses Bazoš listings; writes to Firestore. | Python 3.11 |
 | `scraper-notebooky` | Similarly for notebooky.cz. | Python 3.11 |
-
-| `meteo-ingest` | Polls ČHMÚ API, transforms, stores in Firestore. | Python 3.11 |
-
-| `iot-ingestor` | Receives HTTP POST from ESP32; validates and stores events. | Python 3.11 + FastAPI |
-
+| `meteo-ingest` | Polls ČHMÚ API; transforms and stores data. | Python 3.11 |
+| `iot-ingestor` | Receives HTTP POST from ESP32; uses FastAPI. | Python 3.11 |
 | `export-bigquery` | Daily export of Firestore collections to BigQuery. | Python 3.11 |
 
+---
 
+## 3. Data Architecture
 
-\### 3. Data Model (Firestore)
+### 3.1. Firestore Collections (NoSQL)
+* `telemetry/`: IoT sensor readings (time-series).
+* `events/`: Security events (trigger source, weight, photo path).
+* `scraped/`: Raw scraped data from external sites.
+* `weather/`: Hourly weather data from ČHMÚ.
+* `config/`: System configuration (thresholds, flags).
 
+### 3.2. BigQuery Dataset (`outpost_analytics`)
+* **Tables**: `telemetry`, `events`, `weather`, `scraped`.
+* **Partitioning**: Data is partitioned by ingestion date for query efficiency.
+* **Usage**: Powering dashboards and anomaly detection algorithms.
 
+### 3.3. Cloud Storage Buckets
+* `outpost-backups`: Daily exports of Firestore and BigQuery.
+* `outpost-images`: Reserved for future security camera image storage.
 
-Collections:
+---
 
+## 4. Deployment & Management
 
+* **Current State**: Infrastructure is defined manually via GCP Console.
+* **Future Plan**: Migration to Terraform for IaC (planned for Iteration 4).
+* **Cloud Run Specs**: Services use `--cpu 1 --memory 256Mi` with `--min-instances 0`.
+* **Security**: Scheduler jobs use OIDC authentication to invoke Cloud Run endpoints.
 
-\- `telemetry/` – IoT sensor readings (time‑series).
+---
 
-\- `events/` – Security events (trigger source, weight, photo path).
+## 5. Cost Analysis
 
-\- `scraped/` – Raw scraped data from external sites.
+| Component | Usage Estimate | Monthly Cost |
+| :--- | :--- | :--- |
+| **Cloud Scheduler** | 180 invocations (6 jobs × 30 days) | ~$0.30 |
+| **Cloud Run** | Scaled to zero; <1 min per invocation | < $1.00 |
+| **Firestore** | < 10k documents (within free tier) | $0.00 |
+| **BigQuery** | Within 10 GB storage / 1 TB query limit | $0.00 |
+| **Total** | | **<$1.00 (Practical $0)** |
 
-\- `weather/` – Hourly weather data from ČHMÚ.
+---
 
-\- `config/` – System configuration (thresholds, flags).
+## 6. Future Integrations
 
+* **Make / n8n**: Webhook connection to Firestore for Telegram/email alerts.
+* **Gemini API**: AI-based image classification of security camera photos.
+* **ESP32 Direct Webhook**: Streamlined event ingestion for IoT devices.
 
-
-\### 4. BigQuery Dataset
-
-\- `outpost\_analytics`
-
-&#x20; - Tables: `telemetry`, `events`, `weather`, `scraped`
-
-&#x20; - Partitioned by ingestion date.
-
-&#x20; - Used for dashboards and anomaly detection.
-
-
-
-\### 5. Cloud Storage Buckets
-
-\- `outpost-backups` – Daily exports of Firestore and BigQuery.
-
-\- `outpost-images` – Reserved for security camera images (future).
-
-
-
-\## Deployment \& Management
-
-\- Infrastructure is defined manually via GCP Console (no Terraform yet, planned for Iteration 4).
-
-\- All Cloud Run services use \*\*`--cpu 1 --memory 256Mi`\*\* and are configured to \*\*`--min-instances 0`\*\*.
-
-\- Scheduler jobs are authenticated using OIDC to invoke Cloud Run.
-
-
-
-\## Cost Analysis
-
-\- Cloud Scheduler: 6 jobs × 30 days = 180 invocations (free tier covers 3 jobs, remaining \~$0.30/month).
-
-\- Cloud Run: Each invocation < 1 minute, scaled to zero → typical monthly cost < $1.
-
-\- Firestore: Small document count (<10k) stays within free tier.
-
-\- BigQuery: Queries and storage within free tier (10 GB, 1 TB queries).
-
-\- \*\*Total monthly cost: < $1 (practically $0).\*\*
-
-
-
-\## Future Integrations
-
-\- \*\*Make / n8n\*\* – Connect to Firestore via webhook to trigger Telegram/email alerts.
-
-\- \*\*Gemini API\*\* – Image classification of security photos.
-
-\- \*\*Webhook endpoint\*\* for ESP32 to send events directly to `iot-ingestor`.
-
-
-
-\*Snapshot date: 2026-04-01\*
-
+> [!NOTE]
+> **Snapshot Date:** 2026-04-01
