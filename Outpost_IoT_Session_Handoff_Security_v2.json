@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "dokument": "Outpost_IoT_Session_Handoff_Security_v2",
+    "verze": "2.0",
+    "snapshot": "2026-04-01",
+    "topic": "Security Node B – Triple-Check Perimeter & DIY Weight Trap",
+    "data_type": "Architectural Handoff",
+    "project": "Outpost 2026"
+  },
+  "semantic_analysis": {
+    "evolution": "Posun od pasivního monitoringu baterií (Node A) k aktivnímu zabezpečení perimetru (Node B).",
+    "core_problem": "Vysoká chybovost (false positives) standardních PIR/Doppler senzorů v prostředí údolí (zvěř, vítr, stíny).",
+    "solution_pattern": "Kaskádová validace (Triple-Check logic). Senzory s nízkou selektivitou (Doppler) probouzejí systém, senzory s vysokou selektivitou (Váha) potvrzují poplach.",
+    "methodology": "RAW_FIRST (analýza surového napětí/tlaku) a ARCHITECTURE_BEFORE_CODE."
+  },
+  "priority_module": {
+    "name": "Váhová past (Pneumatic Pressure Trap)",
+    "principle": "Využití uzavřeného vzduchového okruhu (duše/měch) jako hydraulického převodníku síly na tlak.",
+    "hardware_stack": [
+      "MPS20N0040D (Pressure Sensor 0-40kPa)",
+      "HX711 (24-bit ADC)",
+      "ESP32 (Deep-sleep capable logic)",
+      "Silikonová kapilára (izolace prostředí)"
+    ],
+    "logic_thresholds": {
+      "noise_floor": "< 5kg (listí, vítr)",
+      "wildlife_filter": "5kg - 35kg (kuna, srnka)",
+      "human_trigger": "> 40kg (kritický alarm)"
+    },
+    "critical_fix": "Implementace auto-táry (dynamické nulování) pro kompenzaci teplotní roztažnosti vzduchu (stavová rovnice plynů)."
+  },
+  "transferable_principles": {
+    "multi_modal_fusion": "Kombinace různých fyzikálních principů (mikrovlny + infra + tlak) k eliminaci systémových chyb jednotlivých čidel.",
+    "remote_sensing": "Elektronika (ESP32) v suchu a teple (IP67 box), pasivní 'měch' v terénu – klíč k životnosti v off-gridu.",
+    "asynchronous_triggering": "Vrstvené probouzení (Doppler probudí ESP32 -> ESP32 čte HX711) pro úsporu energie z 24V systému."
+  },
+  "alternatives_matrix": {
+    "load_cells": {
+      "pros": "Vysoká přesnost, standardní knihovny HX711",
+      "cons": "Mechanicky křehké, náchylné ke korozi v zemi"
+    },
+    "hall_effect": {
+      "pros": "Bezkontaktní, imunní vůči vodě a blátu",
+      "cons": "Vyžaduje precizní mechanické vedení magnetu"
+    },
+    "tof_laser": {
+      "pros": "Žádný mechanický kontakt, snadná instalace",
+      "cons": "Optické rušení (prach, pavučiny pod deskou)"
+    }
+  },
+  "updated_debts": [
+    {
+      "id": "DEBT_020",
+      "priority": "CRITICAL",
+      "title": "ESP32 ADC Protection",
+      "description": "Průmyslové senzory vrací 4.5V-5V, ESP32 snese 3.3V.",
+      "implementation_path": "Instalace odporového děliče 10k/20k před analogový pin."
+    },
+    {
+      "id": "DEBT_021",
+      "priority": "HIGH",
+      "title": "Dynamic Zero-Tracking",
+      "description": "Změna tlaku vlivem slunce/mrazu způsobuje fantomové alarmy.",
+      "implementation_path": "Software: Exponential Moving Average pro tracking nuly."
+    }
+  ],
+  "pitevni_kniha_new_entries": [
+    {
+      "date": "2026-04-01",
+      "symptom": "Pavoučí sítě generují false PIR alarmy.",
+      "root_cause": "Vysoká citlivost PIR v noci.",
+      "fix": "Logická vazba (PIR AND Weight_Trap_Trigger).",
+      "prevention": "Mechanická síťka na PIR čočku."
+    }
+  ],
+  "next_steps": [
+    "Flash ESP32 s knihovnou HX711 (80Hz mode).",
+    "Fyzický test 'vzduchového nášlapu'",
+    "Kalibrace thresholdů v reálném terénu."
+  ]
+}
