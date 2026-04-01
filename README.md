@@ -31,16 +31,15 @@ Ověřit schopnost systému spolehlivě detekovat dospělou osobu a ignorovat po
 
 | Soubor | Popis |
 | :--- | :--- |
-| `README.md` | Hlavní přehled projektu, principy a cíle. |
-| `LICENSE` | MIT licence. |
-| `koncepce_zabezpeceni.md` | Detailní rozbor strategie ochrany perimetru a metodiky detekce. |
-| `differential_analysis.md` | Srovnání s komerčními systémy a typickými IoT projekty. |
-| `cloud.md` | Popis serverless infrastruktury na Google Cloud Platform (zero idle cost). |
-| `hardware.md` | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
-| `Firmware.md` | Dokumentace k logice kódu pro ESP32 a správy spánkových režimů. |
-| `Testovaci_scenare.md` | Metodika testování (simulace zvěře vs. člověka, teplotní drift). |
-| `Outpost_IoT_Session_Handoff_Security_v2.json` | Architektonický handoff – definice modulů, prahů a rizik. |
-| `Outpost_IoT_Security_PoC_v0.1.json` | Konfigurační data a parametry aktuální verze prototypu. |
+| [`koncepce_zabezpeceni.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/koncepce_zabezpeceni.md) | Detailní rozbor strategie ochrany perimetru a metodiky detekce. |
+| [`differential_analysis.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/differential_analysis.md) | Srovnání s komerčními systémy a typickými IoT projekty. |
+| [`Testovaci_scenare.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Testovaci_scenare.md) | Metodika testování (simulace zvěře vs. člověka, teplotní drift). |
+| [`Outpost_IoT_Session_Handoff_Security_v2.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Session_Handoff_Security_v2.json) | Architektonický handoff – definice modulů, prahů a rizik. 
+| [`Outpost_IoT_Security_PoC_v0.1.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Security_PoC_v0.1.json) | Konfigurační data a parametry aktuální verze prototypu. |
+| [`cloud.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/cloud.md) | Popis serverless infrastruktury na Google Cloud Platform (zero idle cost). |
+| [`hardware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/hardware.md) | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
+| [`Firmware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Firmware.md) | Dokumentace k logice kódu pro ESP32 a správy spánkových režimů. |
+[`README.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/main/README.md) | Hlavní přehled projektu, principy a cíle. |
 
 ---
 
