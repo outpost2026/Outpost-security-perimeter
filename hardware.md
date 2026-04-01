@@ -1,50 +1,35 @@
-\# Hardware Design
+# Návrh hardwaru (Hardware Design)
 
+Tento adresář bude obsahovat veškerou dokumentaci k hardwaru, schémata a diagramy zapojení pinů (pinout) poté, co bude prototyp úspěšně ověřen v terénu.
 
+> [!IMPORTANT]
+> **Stav:** Aktuálně prázdné. Dokumentace bude doplňována průběžně po validaci PoC (Proof of Concept).
 
-This directory will contain all hardware‑related documentation, schematics, and pinout diagrams after the prototype has been validated in the field.
+### Plánovaný obsah:
 
+* `schematics/` – Soubory Fritzing / KiCad pro váhovou podložku a propojení s ESP32.
+* `pinout.md` – Detailní přiřazení GPIO pinů pro ESP32 (PIR, HX711, kamera, MOSFETy).
+* `calibration.md` – Postup kalibrace tenzometrických snímačů krok za krokem.
+* `enclosure.md` – Rozměry boxu s krytím IP67 a pokyny pro montáž.
 
+---
 
-\*\*Currently empty.\*\* Planned content:
+## Předběžné technické informace
 
+Aktuální verze PoC (Proof of Concept) využívá následující komponenty:
 
+| Komponenta | Specifikace a role v systému |
+| :--- | :--- |
+| **ESP32 (Libre)** | Podpora `deep-sleep`, buzení externím přerušením (interrupt) z PIR senzoru. |
+| **PIR senzor AM312** | Miniaturní detektor pohybu s velmi nízkým proudovým odběrem. |
+| **HX711 + 4× 50 kg** | Tenzometrické snímače (load cells) zapojené pro měření celkové hmotnosti. |
+| **ESP32-CAM (OV2640)** | Kamerový modul pro vizuální verifikaci, napájený selektivně přes MOSFET. |
+| **MOSFET moduly (IRF520)** | Slouží ke spínání 5V větve pro HX711 a kameru (úspora energie). |
+| **DC-DC měnič 24V→5V** | Hlavní napájecí modul pro celý systém. |
 
-\- `schematics/` – Fritzing / KiCad files for the load‑cell pad and ESP32 connections.
+### Umístění a ochrana
+Veškerá řídicí elektronika je umístěna v **suchém IP67 boxu** uvnitř objektu. Vnějšímu prostředí (vlivům počasí) je vystavena pouze samotná váhová podložka a PIR senzor.
 
-\- `pinout.md` – Detailed GPIO assignments for ESP32 (PIR, HX711, camera, MOSFETs).
+---
 
-\- `calibration.md` – Step‑by‑step weight calibration procedure.
-
-\- `enclosure.md` – IP67 box dimensions, mounting instructions.
-
-
-
-\## Preliminary Information
-
-
-
-The current PoC uses:
-
-
-
-\- \*\*ESP32 (Libre)\*\* – deep‑sleep, interrupt wake‑up from PIR.
-
-\- \*\*AM312 PIR sensor\*\* – low‑current motion detector.
-
-\- \*\*HX711 + 4× 50 kg load cells\*\* – weight measurement.
-
-\- \*\*ESP32‑CAM (OV2640)\*\* – camera module, powered via MOSFET.
-
-\- \*\*MOSFET modules (IRF520)\*\* – to switch 5V to HX711 and camera.
-
-\- \*\*DC‑DC converter 24V→5V\*\* – system power supply.
-
-
-
-All electronics are housed in a dry IP67 box inside the cottage; only the weight pad and PIR sensor are exposed.
-
-
-
-\*This section will be expanded after field testing.\*
-
+*Tato sekce bude rozšířena po dokončení testování v terénu (předpokládaný termín: Q2 2026).*
