@@ -132,7 +132,7 @@ Zdrojový kód je strukturován do stavového automatu a zahrnuje:
 | Riziko | Řešení |
 |--------|--------|
 | Falešné PIR poplachy | Mechanická síťka, logická vazba AND s váhou (bez váhy nefotí) |
-| Vlhkost poškodí tenzometry | Pro PoC krátkodobé nasazení; po validaci přechod na pneumatickou pastu |
+| Vlhkost poškodí tenzometry | Pro PoC krátkodobé nasazení; po validaci přechod na pneumatickou past|
 | Zvíře zůstane stát na váze | Timeout 30 s bez změny hmotnosti → uspání bez záznamu |
 | Noční záznamy tmavé | Přidat IR přísvit spínaný společně s kamerou |
 | Přepětí na ADC pinu | Odporový dělič + TVS dioda |
@@ -143,7 +143,7 @@ Zdrojový kód je strukturován do stavového automatu a zahrnuje:
 
 - Vyhodnotit přesnost a spolehlivost.
 - Pokud PoC uspěje:
-  - Nahradit tenzometry **pneumatickou pastou** (MPS20N0040D, měch, kapilára) pro vyšší odolnost.
+  - Nahradit tenzometry **pneumatickou pastí** (MPS20N0040D, měch, kapilára) pro vyšší odolnost.
   - Rozšířit perimetr o další vstupní body (okna, severní hrana).
   - Implementovat teplotní kompenzaci (DS18B20 + stavová rovnice).
   - Zvážit vzdálené notifikace (GSM/LTE) pro ostrý provoz.
