@@ -52,17 +52,16 @@ Navržená architektura PoC využívá **kombinaci pohybového senzoru a hmotnos
 
 ## Repozitář – struktura a obsah
 
-| Cesta | Popis |
-|-------|-------|
-| `README.md` | Tento dokument – úvod, princip, cíl PoC, architektura. |
-| `LICENSE` | MIT licence. |
-| `docs/handoff_security_poc.json` | Architektonický handoff – moduly, prahy, rizika, debt. |
-| `docs/differential_analysis.md` | Srovnání řešení s typickými IoT projekty a komerčními alternativami. |
-| `docs/roadmap.md` | Plánované iterace – od tenzometrů po pneumatickou pastu, rozšíření perimetru, cloudová integrace. |
-| `docs/test_scenarios.md` | Testovací scénáře (kočka, srnec, člověk, teplotní drift) a kritéria úspěšnosti. |
-| `cloud/gcp_stack_ingest_v3.md` | Detailní popis serverless GCP infrastruktury (zero idle cost). |
-| `hardware/README.md` | Placeholder – bude obsahovat schémata, pinout, kalibraci po ověření prototypu. |
-| `firmware/README.md` | Placeholder – bude obsahovat zdrojový kód ESP32 po ověření prototypu. |
+| Soubor | Popis |
+| :--- | :--- |
+| [`koncepce_zabezpeceni.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/koncepce_zabezpeceni.md) | Detailní rozbor strategie ochrany perimetru a metodiky detekce. |
+| [`differential_analysis.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/differential_analysis.md) | Srovnání s komerčními systémy a typickými IoT projekty. |
+| [`Testovaci_scenare.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Testovaci_scenare.md) | Metodika testování (simulace zvěře vs. člověka, teplotní drift). |
+| [`Outpost_IoT_Session_Handoff_Security_v2.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Session_Handoff_Security_v2.json) | Architektonický handoff – definice modulů, prahů a rizik. 
+| [`Outpost_IoT_Security_PoC_v0.1.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Security_PoC_v0.1.json) | Konfigurační data a parametry aktuální verze prototypu. |
+| [`cloud.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/cloud.md) | Popis serverless infrastruktury na Google Cloud Platform (zero idle cost). |
+| [`hardware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/hardware.md) | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
+| [`Firmware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Firmware.md) | Dokumentace k logice kódu pro ESP32 a správy spánkových režimů. |
 
 ---
 
