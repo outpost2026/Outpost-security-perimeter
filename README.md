@@ -87,7 +87,11 @@ Navržená architektura PoC využívá **kombinaci pohybového senzoru a hmotnos
 
 ## Autor
 
-Projekt je vyvíjen jako součást portfolia autora – autodidakta s praktickými zkušenostmi v oblasti off‑grid energetiky, automatizace a cloudové infrastruktury. Tento repozitář slouží jako **živý archiv** a demonstrace inženýrského přístupu k řešení reálných problémů.
+Projekt je vyvíjen jako součást portfolia autora – autodidakta s praktickými zkušenostmi v oblasti off‑grid energetiky, automatizace a cloudové infrastruktury. Tento repozitář slouží jako **živý archiv**.
+
+Zachycuje aktuální stav projektu k datu 1. 4. 2026. Obsahuje veškerou dostupnou dokumentaci (předání v JSON, analýzu rozdílů, testovací scénáře, plán vývoje, popis GCP stacku) a definuje strukturu repozitáře. Sekce týkající se hardwaru a firmwaru jsou zatím prázdné a budou doplněny až po nasazení a otestování prototypu.
+
+Úložiště má v průběhu času růst s tím, jak bude projekt dozrávat.
 
 *První commit: 2026-04-01*  
 *Licence: MIT*
