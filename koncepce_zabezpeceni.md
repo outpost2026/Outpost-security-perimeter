@@ -158,12 +158,6 @@ Zdrojový kód je strukturován do stavového automatu a zahrnuje:
 
 ---
 
-## Licence a autorská práva
-
-Tento projekt je vyvíjen pro soukromé účely na pozemku Outpost 2026. Veškerá dokumentace je poskytována „jak je“ bez záruk.
-
----
-
 # Report: Posouzení PoC „Outpost IoT Security Perimeter“
 
 **Dokument:** Outpost_IoT_Security_PoC_v0.1.json  
@@ -276,21 +270,3 @@ PoC je **schválen k realizaci v omezeném rozsahu**, ale s podmínkou revize te
 3.  **Implementace teplotní kompenzace (DEBT_PoC_001):** Povýšit z "MEDIUM" na **"HIGH" prioritu pro PoC**. Přidat DS18B20 do boxu s HX711 a upravit firmware pro korekci hodnoty hmotnosti. V prostředí s denními výkyvy 27 °C je to nutnost pro získání smysluplných dat.
 
 4.  **Úprava plánu logistiky:** Do rozpočtu času zahrnout 1 den na instalaci a utěsnění kabelových prostupů do suchých boxů (použití PG šroubení, ne silikonu).
-
----
-
-## 7. Celkové hodnocení projektu
-
-Jedná se o **velmi slibný a inovativní koncept**, který má potenciál stát se vzorovým řešením pro perimetrovou detekci v off-grid lokalitách. Jeho úspěch však nestojí na softwarové logice (která je dobrá), ale na **mechanické robustnosti a odolnosti vůči environmentálním stresorům**, které byly v počátečním návrhu podceněny.
-
-Po zapracování výše uvedených bodů má projekt vysokou šanci na úspěch a poskytne cenná data pro budoucí rozšíření perimetru.
-
----
-
-| Kritérium | Hodnocení |
-|-----------|-----------|
-| Invence | 9/10 |
-| Technické řešení | 7/10 |
-| ROI | 8/10 |
-| Vhodnost pro prostředí | 6/10 |
-| **Celkem** | **7,5/10** |
