@@ -1,0 +1,226 @@
+{
+  "meta": {
+    "dokument": "Outpost_IoT_Security_PoC_v0.1",
+    "verze": "0.1",
+    "datum": "2026-04-01",
+    "typ": "Architectural Handoff - Prototype",
+    "projekt": "Outpost 2026 - Security Perimeter PoC",
+    "autor": "LLM + Human Review",
+    "stav": "Ready for implementation",
+    "cile": "Ověřit detekci dospělé osoby s rozlišením zvěře v prostředí údolí"
+  },
+  "semantic_analysis": {
+    "evolution": "Přechod od teoretického návrhu pneumatické pasty k praktickému PoC s tenzometrickou váhou a PIR probuzením. Důraz na jednoduchost, rychlou realizaci a ověření klíčových prahů.",
+    "core_problem": "Nemožnost fyzické bariéry, vysoká falešná poplachovost běžných PIR senzorů v přírodním prostředí, potřeba odlišit zvěř (do 35 kg) od člověka (>40 kg).",
+    "solution_pattern": "Dvoustupňová validace: PIR probudí systém, váha s HX711 změří hmotnost. Při překročení hmotnostního prahu se aktivuje kamera a uloží záznam.",
+    "methodology": "Iterativní prototypování v terénu, kalibrace prahů, RAW_FIRST přístup (nejdříve ověřit hardware a logiku, pak optimalizovat)."
+  },
+  "architecture_overview": {
+    "scope": "PoC pokrývá jeden vstupní bod – dveře do místnosti 2 (izolované jádro).",
+    "principles": [
+      "Nízká spotřeba – ESP32 v deep‑sleep >99 % času",
+      "Dvoufaktorová detekce (pohyb + hmotnost)",
+      "Místní ukládání záznamů (není vyžadováno internetové připojení)",
+      "Oddělení elektroniky od venkovního prostředí (suchý box)"
+    ],
+    "data_flow": "PIR senzor → probuzení ESP32 → napájení HX711 a váhy → měření hmotnosti → pokud >40 kg → aktivace kamery → uložení snímků na SD kartu → uspání"
+  },
+  "hardware_modules": {
+    "main_controller": {
+      "type": "ESP32 (Libre)",
+      "purpose": "Řízení logiky, deep‑sleep, ovládání periferií",
+      "power": "3.3V z DC‑DC měniče 24V→5V→3.3V",
+      "notes": "Použít GPIO s přerušením pro probuzení z PIR"
+    },
+    "motion_sensor": {
+      "type": "AM312 PIR (nebo RCWL‑0516 Doppler)",
+      "purpose": "Trvale napájený probouzeč",
+      "power_consumption": "<50 µA (AM312) nebo ~3 mA (RCWL‑0516)",
+      "placement": "Nad dveřmi, chráněno stříškou, s mechanickou sítkou proti pavoukům",
+      "connection": "Výstup na GPIO (interrupt)"
+    },
+    "weight_sensor": {
+      "type": "4× tenzometr 50 kg + HX711",
+      "purpose": "Měření hmotnosti osoby / zvířete",
+      "mechanical": "Nášlapná deska 50×50 cm, zapuštěná před dveřmi",
+      "calibration": "Auto‑tára před každým měřením, prahy nastaveny empiricky",
+      "power": "Napájeno z ESP32 přes MOSFET (spínané pouze při měření)"
+    },
+    "camera": {
+      "type": "ESP32‑CAM (OV2640)",
+      "purpose": "Pořízení záznamu při potvrzeném poplachu",
+      "storage": "microSD karta (FAT32)",
+      "resolution": "1600×1200 (UXGA) nebo video 10 s",
+      "power": "Napájeno z 5V, spínáno MOSFETem po potvrzení hmotnosti",
+      "placement": "V IP65 boxu, nasměrováno na dveře a váhu"
+    },
+    "power_supply": {
+      "input": "24V DC z off‑grid systému (LiFePO₄ 15,12 kWh)",
+      "conversion": "DC‑DC měnič 24V→5V (3A) pro ESP32 a kameru",
+      "switching": "MOSFETy pro spínání HX711 a kamery z GPIO ESP32",
+      "protection": "TVS dioda 3.3V na ADC vstupech, odporový dělič pro signály >3.3V"
+    },
+    "enclosure": {
+      "main_box": "IP67 plastový box uvnitř místnosti 2 (suché prostředí)",
+      "camera_box": "IP65 box venku, s průhledným okénkem",
+      "sensor_protection": "PIR s mechanickou sítkou, tenzometry zatmeleny (pro PoC dočasně)"
+    }
+  },
+  "software_modules": {
+    "firmware": {
+      "language": "Arduino C++ / ESP‑IDF",
+      "framework": "Arduino Core for ESP32",
+      "libraries": ["HX711", "ESP32-CAM", "SD", "EEPROM", "ArduinoJson (pro logy)"]
+    },
+    "state_machine": {
+      "states": [
+        "DEEP_SLEEP (výchozí)",
+        "WAKE_BY_MOTION (probudí PIR)",
+        "MEASURE_WEIGHT (aktivuje HX711, čeká na stabilizaci)",
+        "EVALUATE (porovná hmotnost s prahem)",
+        "TRIGGER_CAM (spustí kameru, uloží záznam)",
+        "LOG_EVENT (zapíše do logu na SD)",
+        "SLEEP (vypne periferie, uspí se)"
+      ]
+    },
+    "thresholds": {
+      "noise_floor": "< 2 kg (kompenzováno auto‑tárou)",
+      "wildlife_filter": "2–35 kg (zaznamená se do logu, nefotí)",
+      "human_trigger": "> 40 kg (fotí/videí)",
+      "timeout_no_weight": "10 s (pokud nedošlo k zatížení, uspat se)"
+    },
+    "calibration": {
+      "auto_tare": "Před každým měřením provést tare (průměr 5 vzorků)",
+      "temperature_compensation": "Pro PoC není implementována; při teplotních výkyvech >20 °C nutno přidat DS18B20 a korekci podle stavové rovnice",
+      "manual_calibration": "Použít závaží 20 kg a 50 kg pro nastavení škálovacího faktoru HX711"
+    },
+    "logging": {
+      "format": "CSV na SD kartě (timestamp, state, weight_kg, action)",
+      "fields": ["epoch", "datetime", "weight_kg", "trigger_type", "filename"]
+    }
+  },
+  "integration_points": {
+    "power_management": {
+      "deep_sleep": "ESP32 uspán, probuzení pouze PIR (přerušení)",
+      "peripheral_power": "MOSFET spíná 5V pro HX711 a kameru; spotřeba v deep‑sleep ~5 mA (včetně PIR)"
+    },
+    "data_storage": {
+      "media": "microSD (ESP32‑CAM nebo hlavní ESP32 s SPI SD slotem)",
+      "retention": "Dokud není karta plná; pro PoC postačí ruční výměna"
+    },
+    "alerting": "Pro PoC není vyžadován vzdálený alert; pouze lokální záznam"
+  },
+  "energy_management": {
+    "budget": {
+      "deep_sleep": "5 mA @ 5V = 0,6 Wh/den",
+      "per_wake": "HX711: 20 mA × 5 s = 0,028 mAh; kamera: 180 mA × 10 s = 0,5 mAh",
+      "daily_estimate": "100 falešných probuzení + 1 reálný poplach = <1 Wh/den"
+    },
+    "sizing": "Kapacita baterie 15,12 kWh zajišťuje provoz měsíce i při zanedbatelném dobíjení",
+    "winter_considerations": "LiFePO₄ nelze nabíjet pod 0 °C; systém musí být napájen z baterie, která se před nabíjením předehřeje (řešeno jinde)"
+  },
+  "validation_protocol": {
+    "test_scenarios": [
+      {
+        "scenario": "Kočka přejde přes váhu",
+        "expected": "Probuzení, měření <5 kg → uložení do logu, nefotí, uspání"
+      },
+      {
+        "scenario": "Srnec (simulace 20 kg závažím)",
+        "expected": "Probuzení, měření 20 kg → log, nefotí"
+      },
+      {
+        "scenario": "Dospělý člověk (80 kg)",
+        "expected": "Probuzení, měření >40 kg → spuštění kamery, uložení fotek/videa, log"
+      },
+      {
+        "scenario": "Vítr/listí před PIR",
+        "expected": "Probuzení, váha nezaznamená zatížení do 10 s → uspání bez logu"
+      },
+      {
+        "scenario": "Teplotní drift (ráno 0 °C, poledne 20 °C)",
+        "expected": "Auto‑tára udržuje nulu; žádné falešné alarmy z driftu"
+      }
+    ],
+    "success_criteria": [
+      "0 falešných alarmů (fotografií) za 7 dní testu při přítomnosti zvěře",
+      "100% detekce vstupu osoby (při standardním použití)",
+      "Stabilita napájení bez výpadků",
+      "Záznamy čitelné a časově označené"
+    ]
+  },
+  "risks_mitigations": [
+    {
+      "risk": "PIR falešné poplachy (pavouci, listí, hmyz)",
+      "mitigation": "Mechanická síťka, logická vazba AND s váhou (bez váhy se nefotí), snížení citlivosti PIR"
+    },
+    {
+      "risk": "Vlhkost poškozuje tenzometry",
+      "mitigation": "Pro PoC krátkodobé nasazení; po validaci přechod na pneumatickou pastu; zatmelení konektorů"
+    },
+    {
+      "risk": "Zvíře zůstane stát na váze",
+      "mitigation": "Timeout 30 s bez změny hmotnosti → uspání bez záznamu"
+    },
+    {
+      "risk": "Kamera nepořídí noční snímek",
+      "mitigation": "ESP32‑CAM má IR filtr, lze přidat IR přísvit (850 nm) spínaný společně s kamerou"
+    },
+    {
+      "risk": "Přepětí na ADC pinu (HX711 výstup 5V)",
+      "mitigation": "Odporový dělič 10k/20k + TVS dioda 3,3V"
+    },
+    {
+      "risk": "Deep‑sleep probuzení nefunkční",
+      "mitigation": "Použít GPIO s RTC (např. GPIO 0, 2, 4, 12, 13, 14, 15) pro externí wake‑up"
+    }
+  ],
+  "next_steps": [
+    "1. Sestavit hardware dle schématu (ESP32, HX711, tenzometry, PIR, ESP32‑CAM).",
+    "2. Naprogramovat základní firmware s deep‑sleep a měřením hmotnosti.",
+    "3. Kalibrovat HX711 s referenčními závažími (20 kg, 50 kg).",
+    "4. Otestovat logiku v laboratorních podmínkách (simulace zátěže).",
+    "5. Nainstalovat na místo (před dveře místnosti 2), provést terénní testy (7 dní).",
+    "6. Vyhodnotit falešné poplachy a přesnost detekce.",
+    "7. Na základě výsledků rozhodnout o přechodu na pneumatickou pastu a rozšíření perimetru."
+  ],
+  "updated_debts": [
+    {
+      "id": "DEBT_PoC_001",
+      "priority": "MEDIUM",
+      "title": "Teplotní kompenzace váhy",
+      "description": "Pro PoC není nutná, ale při přesahu do léta/zimy je nutná. Implementovat DS18B20 a korekci dle stavové rovnice.",
+      "implementation_path": "Přidat teplotní senzor do boxu s ESP32, upravit firmware pro kompenzaci naměřené hmotnosti."
+    },
+    {
+      "id": "DEBT_PoC_002",
+      "priority": "LOW",
+      "title": "Vzdálený alert",
+      "description": "PoC nevyžaduje notifikace, ale pro ostrý provoz je žádoucí upozornění (např. Telegram).",
+      "implementation_path": "Přidat GSM/LTE modul nebo WiFi (není k dispozici) – nutno řešit off‑grid konektivitu."
+    },
+    {
+      "id": "DEBT_PoC_003",
+      "priority": "HIGH",
+      "title": "Přechod na pneumatickou pastu",
+      "description": "Tenzometry jsou krátkodobé řešení. Pro dlouhodobou odolnost je třeba implementovat uzavřený vzduchový okruh s MPS20N0040D.",
+      "implementation_path": "Po validaci PoC nahradit tenzometry měchem, kapilárou a tlakovým senzorem; upravit firmware pro čtení z analogového pinu (s děličem)."
+    }
+  ],
+  "pitevni_kniha": [
+    {
+      "date": "2026-04-01",
+      "symptom": "PIR generuje falešné poplachy v noci (pavouci).",
+      "root_cause": "Citlivý PIR s Fresnelovou čočkou přitahuje hmyz a pavučiny.",
+      "fix": "Přidána mechanická síťka s oky <1 mm před čočku, snížena citlivost na minimum.",
+      "prevention": "Používat PIR s digitálním výstupem a nastavitelným zpožděním; v budoucnu zvážit kombinaci s mikrovlnným senzorem."
+    },
+    {
+      "date": "2026-03-30",
+      "symptom": "HX711 vrací nestabilní hodnoty po probuzení z deep‑sleep.",
+      "root_cause": "Nedostatečný čas pro stabilizaci napájení HX711.",
+      "fix": "Po sepnutí MOSFETu přidat delay 200 ms před prvním čtením.",
+      "prevention": "Vždy před měřením vyčkat na ustálení napájení a zahřátí senzoru."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "revitalization": {
+    "value": "F0 done. Scope expanded to Outpost IoT Hub. Dir structure created. Docs consolidated from origin/Docs. Next: F1 (IoT MVP - DS18B20, Modbus, BMS).",
+    "updated": "2026-07-26T00:00:00+00:00"
+  },
+  "tasks": {
+    "value": {
+      "F0": {"name": "Konsolidace struktury", "status": "done", "deadline": "den 1"},
+      "T01": {"name": "Security perimetr (PIR + weight)", "status": "concept", "priority": "HIGH", "phase": "F3"},
+      "T02": {"name": "DS18B20 teplota heatsinku", "status": "pending", "priority": "CRITICAL", "phase": "F1"},
+      "T03": {"name": "Modbus telemetrie (POW-HVM3.2H)", "status": "pending", "priority": "HIGH", "phase": "F1"},
+      "T04": {"name": "Náhradní NTC termistor", "status": "blocker", "priority": "MEDIUM", "phase": "F1"},
+      "T05": {"name": "JK BMS monitoring (JST PH TTL)", "status": "blocker", "priority": "HIGH", "phase": "F1"},
+      "T06": {"name": "BMP180 klimatická stanice", "status": "concept", "priority": "LOW", "phase": "F2"},
+      "T07": {"name": "GCP cloud + Telegram notifikace", "status": "plan", "priority": "MEDIUM", "phase": "F4"}
+    },
+    "updated": "2026-07-26T00:00:00+00:00"
+  }
+}

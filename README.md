@@ -2,7 +2,7 @@
 
 ## Deterministické zabezpečení perimetru – váhový filtr jako jádro detekce
 
-Projekt řeší zabezpečení odlehlého objektu v náročném terénu (pražská údolí), kde běžná PIR čidla nebo radary generují vysoké množství falešných poplachů kvůli zvěři a vegetaci. Systém staví na **dvoustupňové validaci**, jejímž unikátním prvkem je **váhový detektor**.
+Projekt řeší zásadní problém zabezpečení odlehlé chaty v jednom z mnoha **pražských údolí** – prostředí, kde běžná PIR čidla, Doppler radary generují nepřijatelné množství falešných poplachů. Namísto slepého spoléhání na jeden senzorický princip staví systém na **dvoustupňové validaci**, jejíž jádro tvoří **váhový detektor**.
 
 **Základní odlišnost systému:**
 * **Fyzikální validace:** Váha (tenzometrická nebo pneumatická) měří hmotnost objektu přímo v místě vstupu.
@@ -31,28 +31,57 @@ Ověřit schopnost systému spolehlivě detekovat dospělou osobu a ignorovat po
 
 | Soubor | Popis |
 | :--- | :--- |
-| [`koncepce_zabezpeceni.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/koncepce_zabezpeceni.md) | Detailní rozbor strategie ochrany perimetru a metodiky detekce. |
-| [`differential_analysis.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/differential_analysis.md) | Srovnání s komerčními systémy a typickými IoT projekty. |
-| [`Testovaci_scenare.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Testovaci_scenare.md) | Metodika testování (simulace zvěře vs. člověka, teplotní drift). |
-| [`Outpost_IoT_Session_Handoff_Security_v2.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Session_Handoff_Security_v2.json) | Architektonický handoff – definice modulů, prahů a rizik. 
-| [`Outpost_IoT_Security_PoC_v0.1.json`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Outpost_IoT_Security_PoC_v0.1.json) | Konfigurační data a parametry aktuální verze prototypu. |
-| [`cloud.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/cloud.md) | Popis serverless infrastruktury na Google Cloud Platform (zero idle cost). |
-| [`hardware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/hardware.md) | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
-| [`Firmware.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/Docs/Firmware.md) | Dokumentace k logice kódu pro ESP32 a správy spánkových režimů. |
-[`README.md`](https://github.com/outpost2026/Outpost-security-perimeter/blob/main/README.md) | Hlavní přehled projektu, principy a cíle. |
+| Soubor | Popis |
+| :--- | :--- |
+| [`docs/koncepce_zabezpeceni.md`](docs/koncepce_zabezpeceni.md) | Detailní rozbor strategie ochrany perimetru a metodiky detekce. |
+| [`docs/differential_analysis.md`](docs/differential_analysis.md) | Srovnání s komerčními systémy a typickými IoT projekty. |
+| [`docs/Testovaci_scenare.md`](docs/Testovaci_scenare.md) | Metodika testování (simulace zvěře vs. člověka, teplotní drift). |
+| [`docs/Outpost_IoT_Session_Handoff_Security_v2.json`](docs/Outpost_IoT_Session_Handoff_Security_v2.json) | Architektonický handoff – definice modulů, prahů a rizik. |
+| [`docs/Outpost_IoT_Security_PoC_v0.1.json`](docs/Outpost_IoT_Security_PoC_v0.1.json) | Konfigurační data a parametry aktuální verze prototypu. |
+| [`docs/cloud.md`](docs/cloud.md) | Popis serverless infrastruktury na Google Cloud Platform. |
+| [`docs/hardware.md`](docs/hardware.md) | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
+| [`docs/Firmware.md`](docs/Firmware.md) | Dokumentace k logice kódu pro ESP32. |
+| [`docs/analyza_revitalizace_repozitare_v1.0.docx`](docs/analyza_revitalizace_repozitare_v1.0.docx) | Hluboká analýza repozitáře + P(úspěch) = 0.91. |
+| [`docs/revitalizacni_plan_v1.0.docx`](docs/revitalizacni_plan_v1.0.docx) | Plán revitalizace – 5 fází, ~30 dní. |
 
 ---
 
-## Aktuální stav a další kroky
+## Rozšířený scope — Outpost IoT Hub
 
-* **Status:** Návrh HW a cloudového backendu (GCP) je dokončen.
-* **Fáze:** Příprava na terénní instalaci tenzometrického prototypu.
+Repozitář byl revitalizován z původního "security perimeter" na **Outpost IoT Hub** — monitoring, automatizace a bezpečnost off-grid uzlu.
 
-**Plán vývoje:**
-1.  **Kalibrace v terénu:** Nastavení reálných prahů hmotnosti v místě vstupu.
-2.  **Integrace GCP:** Odesílání telemetrie a snímků do Cloud Run/Cloud Storage.
-3.  **Pneumatická past:** Vývoj odolnější verze senzoru na bázi tlaku vzduchu (náhrada tenzometrů).
-4.  **Notifikace:** Implementace varovných zpráv přes Telegram / Signal.
+**Nové subsystémy:**
+| ID | Subsystém | Priorita | Stav |
+| :--- | :--- | :--- | :--- |
+| T01 | Security perimetr (PIR + weight) | HIGH | koncept |
+| T02 | DS18B20 teplota heatsinku | CRITICAL | MVP |
+| T03 | Modbus telemetrie (POW-HVM3.2H) | HIGH | MVP |
+| T04 | Náhradní NTC termistor | MEDIUM | blocker |
+| T05 | JK BMS monitoring (JST PH TTL) | HIGH | blocker |
+| T06 | BMP180 klimatická stanice | LOW | koncept |
+| T07 | GCP cloud + Telegram notifikace | MEDIUM | plán |
+
+## Adresářová struktura
+
+```
+├── docs/                  # Dokumentace
+├── firmware/              # ESP32/ESP8266 firmware moduly
+├── hardware/              # Schemata, BOM, pinouty
+├── cloud/                 # GCP infrastruktura
+├── tests/                 # Testy
+├── data/                  # Vzorová data
+└── images/                # Fotky, schemata
+```
+
+## Fáze revitalizace
+
+| Fáze | Název | Deadline | Status |
+| :--- | :--- | :--- | :--- |
+| F0 | Konsolidace struktury | den 1 | ✅ HOTOVO |
+| F1 | IoT MVP (DS18B20, Modbus, BMS) | den 1-3 | ⏳ |
+| F2 | Firmware vrstva (ESPHome) | den 4-10 | ⏳ |
+| F3 | Security perimetr | den 11-20 | ⏳ |
+| F4 | Cloud + notifikace | den 21-30 | ⏳ |
 
 ---
 

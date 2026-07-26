@@ -1,1 +1,6 @@
 .env
+*.pyc
+__pycache__/
+.venv/
+gen_analysis_docx.py
+gen_revitalizace_plan.py
