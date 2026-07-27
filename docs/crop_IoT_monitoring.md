@@ -776,7 +776,7 @@ Důvody:
 
 ---
 
-*Kapitola D – Semantická analýza GO/NO-GO 2026-07-27 | Outpost kontext master – Polní kultura – rychle rostoucí varieta*
+*Kapitola D – Semantická analýza GO/NO-GO 2026-07-27 | Outpost kontext master – Polní kultura – F1*
 
 ### 1.1 K dispozici nyní (bez nákupu)
 
@@ -1192,10 +1192,10 @@ Stávající Telegram bot (3 kanály: info, alerts, direct) se rozšíří o:
 
 **Celková investice:** ~2 440 Kč
 **Denní spotřeba:** +4.3 Wh (0.028 % baterie)
-**Návratnost:** I při 10% navýšení výnosu díky IoT je ROI pozitivní.**
+**Návratnost:** Návratnost investice je dosažena při prvním úspěšném zásahu.
 
 **Nejvyšší hEROI položka:** SHT30 + BH1750 (160 Kč) – VPD řízení je kritický faktor pro kulturu a jeho monitoring může zabránit ztrátě celé sklizně plísní při vlhkém vzduchu (botrytis).
 
 ---
 
-*Appendix – IoT monitoring rešerše 2026-07-27 | Outpost kontext master – Polní kultura – rychle rostoucí varieta | Navazuje na Outpost Security Perimeter / Outpost IoT Hub*
+*Appendix – IoT monitoring rešerše 2026-07-27 | Outpost kontext master – Polní kultura – F1 | Navazuje na Outpost Security Perimeter / Outpost IoT Hub*
