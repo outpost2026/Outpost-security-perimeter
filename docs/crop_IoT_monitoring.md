@@ -1192,7 +1192,7 @@ Stávající Telegram bot (3 kanály: info, alerts, direct) se rozšíří o:
 
 **Celková investice:** ~2 440 Kč
 **Denní spotřeba:** +4.3 Wh (0.028 % baterie)
-**Návratnost:** Při realistické hodnotě produkce je investice < 4 % hodnoty sklizně. **I při 10% navýšení výnosu díky IoT je ROI pozitivní.**
+**Návratnost:** I při 10% navýšení výnosu díky IoT je ROI pozitivní.**
 
 **Nejvyšší hEROI položka:** SHT30 + BH1750 (160 Kč) – VPD řízení je kritický faktor pro kulturu a jeho monitoring může zabránit ztrátě celé sklizně plísní při vlhkém vzduchu (botrytis).
 
