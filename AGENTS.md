@@ -32,6 +32,7 @@ Covers: DS18B20 temp monitoring, Modbus telemetry, JK BMS, PIR+weight detection,
 - Všechny importované artefakty patří do /docs/ nebo /hardware/.
 - Source_raw/Outpost_kontext_master je RAG context source (není v tomto repu).
 - IOT/ již neexistuje — jeho obsah je v historii nebo v KB.
+- `docs/crop_IoT_monitoring.md` — IoT příručka pro polní kulturu (DS18B20, SHT30, BH1750, soil moisture, VPD, GCP pipeline).
 
 ## Communication
 - Czech primary, English for code comments.
