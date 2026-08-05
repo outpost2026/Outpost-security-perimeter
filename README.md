@@ -35,6 +35,8 @@ Repozitář byl revitalizován z původního "security perimeter" na **Outpost I
 | **Infrastruktura** | |
 | [`cloud.md`](docs/cloud.md) | Popis serverless infrastruktury na Google Cloud Platform. |
 | [`hardware.md`](docs/hardware.md) | Specifikace komponent (PIR, ESP32, tenzometry) a schéma zapojení. |
+| **Salvage & Recycling** | |
+| [`hardware.md` — Appendix A](hardware.md#a1-salvage-hardware--indukční-vařič-rohnson-r-2450) | Salvage komponentů z rozbité indukce pro Outpost projekty (EMI, alarm, senzory). |
 | [`Firmware.md`](docs/Firmware.md) | Dokumentace k logice kódu pro ESP32. |
 | **Analýzy a plány** | |
 | [`analyza_revitalizace_repozitare_v1.0.docx`](docs/analyza_revitalizace_repozitare_v1.0.docx) | Hluboká analýza repozitáře + P(úspěch) = 0.91. |
@@ -50,7 +52,7 @@ Repozitář byl revitalizován z původního "security perimeter" na **Outpost I
 | T02 | DS18B20 teplota heatsinku | CRITICAL | MVP hotovo |
 | T03 | Modbus telemetrie (POW-HVM3.2H) | HIGH | MVP |
 | T04 | Náhradní NTC termistor | MEDIUM | blocker |
-| T05 | JK BMS monitoring (JST PH TTL) | HIGH | blocker |
+| T05 | JK BMS monitoring (JST PH TTL) | HIGH | blocker (EMI řešení: Appendix A) |
 | T06 | BMP180 klimatická stanice | LOW | koncept |
 | T07 | GCP cloud + Telegram notifikace | MEDIUM | plán |
 
